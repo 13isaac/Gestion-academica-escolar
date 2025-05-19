@@ -7,10 +7,18 @@ Este proyecto utiliza **Flask-Migrate** y **MariaDB** para gestionar cambios en 
 ## 🔄 Flujo de trabajo para cambios en la BD
 
 ### 🧱 Primera configuración (inicial)
+- Crea la base de datos y tu usuario otorgando todos los permisos sobre esta
+```bash
+CREATE DATABASE gestion_academica;
+CREATE USER 'ga_admin'@'localhost' IDENTIFIED BY 'Gestion123!';
+GRANT ALL PRIVILEGES ON gestion_academica.* TO 'ga_admin'@'localhost';
+FLUSH PRIVILEGES;
+```
 
-- Ejecuta las migraciones iniciales:
+- Ejecuta las migraciones iniciales (desde: Gestion-academica-escolar/app/backend):
 
 ```bash
+export FLASK_APP=run.py
 flask db init
 flask db migrate -m "Esquema inicial"
 flask db upgrade
@@ -22,7 +30,7 @@ mysql -u ga_admin -p -e "USE gestion_academica; SHOW TABLES;"
 ```
 
 ### ✏️ Cuando hagas cambios en los modelos (por ejemplo, estudiante_model.py)
-- Genera una nueva migración:
+- Genera una nueva migración (desde: Gestion-academica-escolar/app/backend):
 
 bash
 ```bash

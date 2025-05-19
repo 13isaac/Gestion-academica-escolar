@@ -1,0 +1,13 @@
+# Paquetes principales
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-JWT-Extended
+PyMySQL  
+python-dotenv
+flask
+flask-sqlalchemy
+Flask-Login
+
+Flask-CORS
+#pytest
