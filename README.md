@@ -18,9 +18,7 @@ FLUSH PRIVILEGES;
 - Ejecuta las migraciones iniciales (desde: Gestion-academica-escolar/app/backend):
 
 ```bash
-export FLASK_APP=run.py
-flask db init
-flask db migrate -m "Esquema inicial"
+pip install -r requirements.txt
 flask db upgrade
 ```
 
@@ -91,4 +89,24 @@ git push
 ```bash
 git pull
 flask db upgrade
+```
+# Levantar tanto el frontend como el backend
+## Frontend Setup
+1. Instalar Node.js v18.x o superior:
+   - [Download Node.js](https://nodejs.org/)
+
+2. Configurar el proyecto:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   
+## Para levantar el backend en una termianl ejecutar lo siguiente (desde: Gestion-academica-escolar/app/backend)
+```bash
+python3 run.py
+```
+## Para levantar el frontend en una terminal nueva sin cerrar o tumbar el anterior servicio (desde: Gestion-academica-escolar/app/frontend)
+```bash
+npm run dev
 ```
