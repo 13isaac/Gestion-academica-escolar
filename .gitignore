@@ -1,0 +1,31 @@
+# Entorno y dependencias
+venv/
+.env
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# Base de datos y migraciones locales
+/instance/
+*.sqlite
+*.sql
+*.dump
+
+# Frontend (React)
+frontend/node_modules/
+frontend/.env
+frontend/build/
+
+# IDE y herramientas
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs y archivos temporales
+*.log
+*.tmp
+
+# Archivos generados por el sistema
+.DS_Store
+Thumbs.db
