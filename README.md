@@ -8,7 +8,7 @@ Este proyecto utiliza **Flask-Migrate** y **MariaDB** para gestionar cambios en 
 
 ### 🧱 Primera configuración (inicial)
 
-Ejecuta las migraciones iniciales:
+- Ejecuta las migraciones iniciales:
 
 ```bash
 flask db init
@@ -16,13 +16,13 @@ flask db migrate -m "Esquema inicial"
 flask db upgrade
 ```
 
-Verifica las tablas creadas en MariaDB:
+- Verifica las tablas creadas en MariaDB:
 ```bash
 mysql -u ga_admin -p -e "USE gestion_academica; SHOW TABLES;"
 ```
 
-✏️ Cuando hagas cambios en los modelos (por ejemplo, estudiante_model.py)
-Genera una nueva migración:
+### ✏️ Cuando hagas cambios en los modelos (por ejemplo, estudiante_model.py)
+- Genera una nueva migración:
 
 bash
 ```bash
@@ -31,41 +31,41 @@ flask db migrate -m "Descripción del cambio"
 flask db migrate -m "Añadir campo email a Alumnos"
 ```
 
-Aplica los cambios:
+- Aplica los cambios:
 
 ```bash
-Copiar código
 flask db upgrade
 ```
 
-Verifica los cambios en la base de datos:
+- Verifica los cambios en la base de datos:
 
 ```bash
 mysql -u ga_admin -p -e "USE gestion_academica; DESCRIBE Alumnos;"
 ```
 
-👥 Sincronizar tus cambios con migo o visceversa
-Obtener los últimos cambios del repositorio:
+### 👥 Sincronizar tus cambios con migo o visceversa
+
+- Obtener los últimos cambios del repositorio:
 ```bash
 git pull origin main
 ```
-Instalar dependencias (si hay cambios):
+- Instalar dependencias (si hay cambios):
 ```bash
 pip install -r requirements.txt
 ```
 
-Aplicar las migraciones en su base local:
+- Aplicar las migraciones en su base local:
 ```bash
 flask db upgrade
 ```
 
-📋 Checklist para cada cambio
+### 📋 Checklist para cada cambio
  - Modelos de Python actualizados
  - Nueva migración generada (flask db migrate)
  - Migración aplicada (flask db upgrade)
  - Archivos de migración agregados y commiteados
  
-🧪 Ejemplo de flujo completo
+### 🧪 Ejemplo de flujo completo
 ```bash
 # 1. Modificas estudiante_model.py
 flask db migrate -m "Añadir columna 'activo' a Alumnos"
@@ -79,7 +79,7 @@ git commit -m "db: Añadir campo activo a estudiantes"
 git push
 ```
 
-El otro desarrollador solo necesita hacer:
+- El otro desarrollador solo necesita hacer:
 ```bash
 git pull
 flask db upgrade
