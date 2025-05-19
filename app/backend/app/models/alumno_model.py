@@ -1,5 +1,5 @@
 import json
-from database import db
+from app.database import db
 from flask_login import UserMixin
 
 class Alumno(db.Model):

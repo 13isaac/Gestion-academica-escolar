@@ -1,7 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from . import db 
 
-db = SQLAlchemy()
 migrate = Migrate()
 
 def init_app(app):

@@ -1,7 +1,10 @@
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent))
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
-from database import db
+from app.database import db
 from flask_cors import CORS
 
 from app.controllers.alumno_controller import alumno_bp
@@ -26,11 +29,9 @@ migrate = Migrate(app, db)
 def check_tables():
     with app.app_context():
         inspector = db.inspect(db.engine)
-        #print("############# Tablas existentes:", inspector.get_table_names())
+        
 
 if __name__ == "__main__":
-    #check_tables()
     with app.app_context():
         db.create_all()
-    #check_tables()
     app.run(debug=True)
