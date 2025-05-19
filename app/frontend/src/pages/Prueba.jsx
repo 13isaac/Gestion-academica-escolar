@@ -1,4 +1,5 @@
 import { useFetch } from '../hooks/useFetch'
+import { Boton } from '../components/Boton'
 
 export const Prueba = () => {
     const {data, error} = useFetch("http://localhost:5000/api/alumnos")
@@ -14,6 +15,7 @@ export const Prueba = () => {
                     </ul>
                 </div>
             </div>
+            <Boton/>
         </>
     )
 }
