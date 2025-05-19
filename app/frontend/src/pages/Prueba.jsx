@@ -1,4 +1,4 @@
-import { useFetch } from "./useFetch"
+import { useFetch } from '../hooks/useFetch'
 
 export const Prueba = () => {
     const {data, error} = useFetch("http://localhost:5000/api/alumnos")
