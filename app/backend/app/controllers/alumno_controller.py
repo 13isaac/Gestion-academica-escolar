@@ -20,5 +20,5 @@ def get_alumnos():
 def get_alumno(id):
     alumno = Alumno.get_by_id(id)
     if alumno:
-        return jsonify(render_alumno)
-    return jsonify({"error": "Alumno no encontrado"}), 404
+        return jsonify(render_alumno(alumno))
+    return jsonify({"error": "Alumno no encontrado"}), 401
