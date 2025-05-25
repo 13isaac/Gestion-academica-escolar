@@ -1,7 +1,8 @@
 import React from 'react'
+import "../styles/Boton.css"
 
-export const Boton = () => {
+export const Boton = ({texto}) => {
     return (
-        <div>Boton</div>
+        <button>{texto}</button>
     )
 }

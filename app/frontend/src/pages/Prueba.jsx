@@ -1,5 +1,6 @@
 import { useFetch } from '../hooks/useFetch'
 import { Boton } from '../components/Boton'
+import { Footer } from '../components/Footer'
 
 export const Prueba = () => {
     const {data, error} = useFetch("http://localhost:5000/api/alumnos")
@@ -16,6 +17,7 @@ export const Prueba = () => {
                 </div>
             </div>
             <Boton/>
+            <Footer/>
         </>
     )
 }
