@@ -35,18 +35,18 @@
     border-radius: 10px;
 }
 .titulo-cursos{
-    color: rgb(165, 223, 223);
+    color: #ffffff;
     text-align: center;
     font-family: "Alfa Slab One", serif;
     margin-bottom: 20px;
 }
 .titulo-datos{
-    color: rgb(165, 223, 223);
+    color: #ffffff;
     text-align: center;
     font-family: "Alfa Slab One", serif;
     margin-bottom: 20px;
     margin-top: 30px;
 }
 .lista{
-    color: aliceblue;
+    color: rgb(255, 255, 255);
 }
