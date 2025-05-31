@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Perfil from './pages/Perfil.jsx'
+import ListaAlumnos from './pages/ListaAlumnos.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<Login/>} />
         <Route path="/perfil" element={<Perfil/>} />
+        <Route path="/alumnos" element={<ListaAlumnos/>}/>
       </Routes>
     </BrowserRouter>
   </StrictMode>,
