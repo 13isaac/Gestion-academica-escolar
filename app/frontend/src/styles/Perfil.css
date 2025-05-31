@@ -1,16 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
 
-.body{
-    padding: 50px;
-}
+
 .carta-perfil{
     margin: 0;
+    
 }
 .nombre-user{
     color: #f2c48e !important;
+    font-size: 30px;
 }
 .rol-user{
     color: #a78763!important;
+    font-size: 30px;
 }
 .icono{
     border: #d7d0c3 2px solid;
@@ -18,6 +19,9 @@
                 0 0 25px #f2c48e,
                 0 0 50px #f2c48e,
                 0 0 75px #f2c48e;
+    height: 380px;
+    width: 380px;
+    
 }
 .borde{
     border: solid white 1px;
@@ -27,18 +31,21 @@
 .botones{
     padding-bottom: 10px;
     padding-top: 10px;
+    font-size: 23px;
 }
 .datos{
     border: solid white 1px;
     padding: 4px;
     margin-top: 28px;
     border-radius: 10px;
+    
 }
 .titulo-cursos{
     color: #ffffff;
     text-align: center;
     font-family: "Alfa Slab One", serif;
     margin-bottom: 20px;
+    font-size: 40px;
 }
 .titulo-datos{
     color: #ffffff;
@@ -46,7 +53,9 @@
     font-family: "Alfa Slab One", serif;
     margin-bottom: 20px;
     margin-top: 30px;
+    font-size: 40px;
 }
 .lista{
     color: rgb(255, 255, 255);
+    font-size: 23px;
 }

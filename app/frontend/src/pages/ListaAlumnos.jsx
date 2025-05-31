@@ -24,8 +24,8 @@ export const ListaAlumnos = () => {
                                 <ul>
                                     <li><strong>datos:</strong>aaaaa</li>
                                 </ul>
-                            <Button className='m-1 boton-carta' variant="primary">Editar</Button>
-                            <Button className='m-1 boton-carta' variant="danger">Eliminar</Button>
+                            <Button className='m-1 boton-carta-azul' variant="outline-primary">Editar</Button>
+                            <Button className='m-1 boton-carta-rojo' variant="outline-danger">Eliminar</Button>
                         </Card.Body>
                     </Card>
                 </Col>

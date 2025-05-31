@@ -12,16 +12,16 @@ import Profesor from '../assets/profesor.png'
 
 export const Perfil = () => {
     return (
-        <Container className='body' fluid>
-            <Row>
-                <Col className="d-flex flex-column align-items-center text-center carta-perfil" md={4}>
+        <Container fluid className='contenedor-fluid'>
+            <Row className='contenedor'>
+                <Col className="d-flex flex-column align-items-center text-center carta-perfil" md={5}>
                     <Image src={Admin} roundedCircle className='icono'/>
                     <div className='datos'>
                         <h5 className='nombre-user'>Nombre de usuario</h5>
                         <h6 className='rol-user'>Rol</h6>
                     </div>
                 </Col>
-                <Col md={{ span: 6, offset: 2 }}>
+                <Col md={{ span: 5, offset: 1 }}>
                     <h2 className='titulo-cursos'>Cursos Disponibles</h2>
                     <Row md={3} className='borde'>
                         <Col className='botones'>

@@ -1,20 +1,20 @@
-.icon{
+.icon-nav{
     border: #d7d0c3 2px solid;
     box-shadow: 0 0 5px #f2c48e,
                 0 0 25px #f2c48e,
                 0 0 50px #f2c48e,
                 0 0 75px #f2c48e;
-    height: 40px;
+    height: 70px;
     margin: 7px;
     transition: 500ms;
 }
-.icon:hover{
+.icon-nav:hover{
     box-shadow: 1px 1px 13px #8d6a57, -1px -1px 13px #e6a283;
-    transition: 500ms;
+    transition: 500ms;;
 }
 .titulo{
     color: white;
-    font-size: 10px;
+    font-size: 15px;
     text-align: center;
     padding: 0;
     margin: 0;
@@ -34,5 +34,15 @@
     justify-content: center;
 }
 .dato{
+    color: rgb(199, 199, 199);
+    font-size: 25px;
+}
+.dato-link{
+    font-size: 25px;
     color: white;
+    transition: 400ms;
+}
+.dato-link:hover{
+    color: rgb(0, 0, 162);
+    transition: 400ms;
 }

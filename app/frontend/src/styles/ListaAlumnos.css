@@ -10,6 +10,18 @@
                 0 0 20px #ffc9c9,
                 0 0 30px #ffffff;
 }
-.boton-carta{
+.boton-carta-azul{
     width: 100%;
+    box-shadow: 0 0 3px #000f62,
+                0 0 3px #2145d1,
+                0 0 5px #6e79f3,
+                0 0 10px #c8cee9;
+    margin-bottom: 15px !important;
+}
+.boton-carta-rojo{
+    width: 100%;
+    box-shadow: 0 0 3px #530606,
+                0 0 3px #d23131,
+                0 0 5px #e64f4f,
+                0 0 10px #e89393;
 }
