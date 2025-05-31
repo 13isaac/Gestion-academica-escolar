@@ -1,4 +1,4 @@
-button {
+.boton {
     height: 50px;
     margin: 5px;
     width: 100%;
@@ -12,7 +12,7 @@ button {
     align-items: center;
     font-family: Consolas, Courier New, monospace;
     border: solid #2d4155 1px;
-    font-size: 16px;
+    font-size: 15px;
     color: rgb(0, 0, 0);
     -webkit-transition: 500ms;
     transition: 500ms;
@@ -24,7 +24,7 @@ button {
     inset 3px 3px 8px #43260c, inset -3px -3px 8px #43260c;
 }
 
-button:hover {
+.boton:hover {
     -webkit-box-shadow: 1px 1px 13px #20232e, -1px -1px 13px #545b78;
     box-shadow: 1px 1px 13px #8d6a57, -1px -1px 13px #e6a283;
     color: #d6d6d6;
@@ -32,7 +32,7 @@ button:hover {
     transition: 500ms;
 }
 
-button:active {
+.boton:active {
     -webkit-box-shadow: 1px 1px 13px #20232e, -1px -1px 33px #545b78;
     box-shadow: 1px 1px 13px #fff1a1, -1px -1px 33px #ffe868;
     color: #d6d6d6;

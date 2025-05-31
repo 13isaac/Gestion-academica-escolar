@@ -1,0 +1,15 @@
+.contenido {
+    padding-top: 150px;
+}
+.carta{
+    margin-bottom: 20px;
+    background-color: rgb(0, 0, 0);
+    color: white;
+    box-shadow: 0 0 5px #f2c48e,
+                0 0 5px #f2c48e,
+                0 0 20px #ffc9c9,
+                0 0 30px #ffffff;
+}
+.boton-carta{
+    width: 100%;
+}
