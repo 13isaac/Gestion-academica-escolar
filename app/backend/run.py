@@ -10,6 +10,10 @@ from flask_cors import CORS
 from app.controllers.alumno_controller import alumno_bp
 from app.controllers.profesor_controller import profesor_bp
 from app.controllers.usuario_controller import usuario_bp
+from app.controllers.asistencia_controller import asistencia_bp
+from app.controllers.matricula_controller import matricula_bp
+from app.controllers.curso_controller import curso_bp
+from app.controllers.nota_controller import nota_bp
 
 app=Flask(__name__)
 CORS(app)
@@ -25,6 +29,10 @@ jwt = JWTManager(app)
 app.register_blueprint(alumno_bp, url_prefix = "/api")
 app.register_blueprint(profesor_bp, url_prefix = "/api")
 app.register_blueprint(usuario_bp, url_prefix = "/api")
+app.register_blueprint(matricula_bp, url_prefix = "/api")
+app.register_blueprint(curso_bp, url_prefix = "/api")
+app.register_blueprint(nota_bp, url_prefix = "/api")
+app.register_blueprint(asistencia_bp, url_prefix = "/api")
 
 migrate = Migrate(app, db)
 

@@ -73,6 +73,8 @@ flask db upgrade
  
 ### 🧪 Ejemplo de flujo completo
 ```bash
+# 0. Inicio
+flask db init
 # 1. Modificas estudiante_model.py
 flask db migrate -m "Añadir columna 'activo' a Alumnos"
 

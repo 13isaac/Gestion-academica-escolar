@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
+.bloque-login {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 400px;
+  background-color: rgb(31, 31, 31);
+  border-radius: 8px;
+}
+
+.bienvenida {
+    color: #a78763!important;
+    text-align: center;
+    font-family: "Alfa Slab One", serif;
+}
+
+.iniciar-sesion {
+    color: #f2c48e !important;
+    text-align: center;
+    font-family: "Alfa Slab One", serif;
+    font-size: 45px;
+}
+
+.logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #d7d0c3;
+    box-shadow: 0 0 5px #f2c48e,
+                0 0 25px #f2c48e,
+                0 0 50px #f2c48e,
+                0 0 75px #f2c48e;
+}
+
+.input-rectangulo {
+    margin-top: 30px;
+    border: 2px solid #c3d7c3;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.input-rectangulo::placeholder {
+    color: #a78763;
+    font-style: italic;
+}
