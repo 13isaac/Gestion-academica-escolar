@@ -25,7 +25,7 @@ export const Perfil = () => {
                     <h2 className='titulo-cursos'>Cursos Disponibles</h2>
                     <Row md={3} className='borde'>
                         <Col className='botones'>
-                            <Boton texto="hola" ruta='/alumnos?curso=curso'/>
+                            <Boton texto="Matematica" ruta='/alumnos?curso=Matematica'/>
                         </Col>
                         <Col className='botones'>
                             <Boton texto="hola" ruta='/alumnos?curso=curso'/>

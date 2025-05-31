@@ -19,6 +19,7 @@ FLUSH PRIVILEGES;
 
 ```bash
 pip install -r requirements.txt
+export FLASK_APP=run.py #Linux
 flask db upgrade
 ```
 
@@ -92,6 +93,28 @@ git push
 git pull
 flask db upgrade
 ```
+### ✏️ En caso de inconsistencias con las tablas y los modelos:
+- Elimina la carpeta de migraciones (si existe):
+```bash
+rm -rf migrations/
+```
+- Elimina la tabla alembic_version de tu base de datos:
+```bash
+DROP TABLE alembic_version;
+```
+- Reinicializa las migraciones:
+```bash
+flask db init
+```
+- Crea una nueva migración inicial:
+```bash
+flask db migrate -m "Initial migration"
+```
+- Aplica las migraciones:
+```bash
+flask db upgrade
+```
+
 # Levantar tanto el frontend como el backend
 ## Frontend Setup
 1. Instalar Node.js v18.x o superior:
