@@ -16,3 +16,12 @@ def render_matricula(matricula):
             "id_curso":matricula.id_curso,
             "fecha_inscripcion":matricula.fecha_inscripcion
     }
+
+def render_alumnos_curso(matriculas):
+    return [
+        {
+            "id_alumno":matricula.id_alumno,
+            "id_curso":matricula.id_curso,
+        }
+        for matricula in matriculas
+    ]
