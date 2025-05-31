@@ -25,8 +25,8 @@ def get_matricula(id):
     return jsonify({"message": "Matricula no encontrada"}), 401
 
 @matricula_bp.route("cursos/<int:id>/alumnos", methods=["GET"])
-#@jwt_required
-#@roles_required(rol = ["admin","profesor"])
+@jwt_required
+@roles_required(rol = ["admin","profesor"])
 def get_alumnos_por_curso(id):
     curso = Curso.get_by_id(id)
     if curso:
