@@ -10,8 +10,8 @@ from app.views.alumno_view import render_alumno_list, render_alumno
 alumno_bp = Blueprint("alumno",__name__)
 
 @alumno_bp.route("/alumnos", methods = ["GET"])
-#@jwt_required
-#@roles_required(rol = ["admin","profesor"])
+@jwt_required
+@roles_required(rol = ["admin","profesor"])
 def get_alumnos():
     alumnos = Alumno.get_all()
     return jsonify(render_alumno_list(alumnos))

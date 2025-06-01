@@ -73,7 +73,7 @@ return (
           </Form.Group>
 
           <Boton texto={loading ? "Cargando..." :"Acceder"}
-          variant="primary" type="submit" className="w-100"></Boton>
+          variant="primary" type="submit" className="w-100"/>
 
           {error && <p className="mt-3 text-danger">{error}</p>}
         </Form>

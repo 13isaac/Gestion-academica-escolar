@@ -36,6 +36,12 @@ def login():
         access_token = create_access_token(
             identity = {"nombre_usuario":usuario.nombre_usuario, "rol":usuario.rol}
         )
-        return jsonify(access_token=access_token), 200
+
+        return jsonify(
+            access_token=access_token,
+            nombre_usuario=usuario.nombre_usuario,
+            rol=usuario.rol
+        ), 200
+    
     else:
         return jsonify({"error":"Crendenciales inválidas"}), 401
