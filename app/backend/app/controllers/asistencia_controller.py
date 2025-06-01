@@ -9,16 +9,16 @@ asistencia_bp = Blueprint("asistencia", __name__)
 
 #Lista de Asistencia
 @asistencia_bp.route("/asistencias", methods=["GET"])
-@jwt_required
-@roles_required(rol=["admin", "profesor"])
+#@jwt_required
+#@roles_required(rol=["admin", "profesor"])
 def get_asistencias():
     asistencias = Asistencia.get_all()
     return jsonify(render_asistencia_list(asistencias))
 
 #Obtener por ID
 @asistencia_bp.route("/asistencias/<int:id>", methods=["GET"])
-@jwt_required
-@roles_required(rol=["admin", "profesor", "user"])
+#@jwt_required
+#@roles_required(rol=["admin", "profesor", "user"])
 def get_asistencia(id):
     asistencia = Asistencia.get_by_id(id)
     if asistencia:
@@ -27,8 +27,8 @@ def get_asistencia(id):
 
 #Crear nueva Asistencia
 @asistencia_bp.route("/asistencias", methods = ["POST"])
-@jwt_required
-@roles_required(rol=["profesor", "admin"])
+#@jwt_required
+#@roles_required(rol=["profesor", "admin"])
 def create_asistencia():
     data = request.json
     id_alumno = data.get("id_alumno")
@@ -47,8 +47,8 @@ def create_asistencia():
 
 #Actualizar Asistencia
 @asistencia_bp.route("/asistencias/<int:id>", methods=["PUT"])
-@jwt_required
-@roles_required(rol=["admin", "profesor"])
+#@jwt_required
+#@roles_required(rol=["admin", "profesor"])
 def update_asistencia(id):
     asistencia = Asistencia.get_by_id(id)
 
@@ -67,8 +67,8 @@ def update_asistencia(id):
 
 #Eliminar Asistencia
 @asistencia_bp.route("/asistencias/<int:id>", methods=["DELETE"])
-@jwt_required
-@roles_required(rol=["admin", "profesor"])
+#@jwt_required
+#@roles_required(rol=["admin", "profesor"])
 def delete_asistencia(id):
     asistencia = Asistencia.get_by_id(id)
 

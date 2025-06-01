@@ -48,3 +48,8 @@ class Notas(db.Model):
     def delete(self):
         db.session.delete(self)
         db.session.commit
+    @staticmethod
+    def get_by_id_alumno_id_curso(id_curso, id_alumno):
+        return Notas.query.filter_by(id_alumno=id_alumno, id_curso=id_curso).all()
+    
+    """ def nota_update_campos(self,evaluacion,nota): """
