@@ -10,38 +10,34 @@ import Admin from '../assets/admin.png'
 import Estudiante from '../assets/estudiante.png'
 import Profesor from '../assets/profesor.png'
 
+import { useFetch } from '../hooks/useFetch'
+import { useNavigate } from 'react-router-dom'
+
 export const Perfil = () => {
+    const {data,error} = useFetch("http://localhost:5000/api/cursos");
+    const navigate = useNavigate();
+
     return (
-        <Container className='body' fluid>
-            <Row>
-                <Col className="d-flex flex-column align-items-center text-center carta-perfil" md={4}>
+        <Container fluid className='contenedor-fluid'>
+            <Row className='contenedor'>
+                <Col className="d-flex flex-column align-items-center text-center carta-perfil" md={5}>
                     <Image src={Admin} roundedCircle className='icono'/>
                     <div className='datos'>
                         <h5 className='nombre-user'>Nombre de usuario</h5>
                         <h6 className='rol-user'>Rol</h6>
                     </div>
                 </Col>
-                <Col md={{ span: 6, offset: 2 }}>
+                <Col md={{ span: 5, offset: 1 }}>
                     <h2 className='titulo-cursos'>Cursos Disponibles</h2>
                     <Row md={3} className='borde'>
-                        <Col className='botones'>
-                            <Boton texto="hola" ruta='/alumnos?curso=curso'/>
-                        </Col>
-                        <Col className='botones'>
-                            <Boton texto="hola" ruta='/alumnos?curso=curso'/>
-                        </Col>
-                        <Col className='botones'>
-                            <Boton texto="hola" ruta='/alumnos?curso=curso'/>
-                        </Col>
-                        <Col className='botones'>
-                            <Boton texto="hola" ruta='/alumnos?curso=curso'/>
-                        </Col>
-                        <Col className='botones'>
-                            <Boton texto="hola" ruta='/alumnos?curso=curso'/>
-                        </Col>
-                        <Col className='botones'>
-                            <Boton texto="hola" ruta='/alumnos?curso=curso'/>
-                        </Col>
+                        {data?.map((curso) => (
+                            <Col key={curso.id_curso}>
+                                <Boton 
+                                    texto={curso.nombre} 
+                                    ruta={`/alumnos?curso=${encodeURIComponent(curso.nombre)}&id=${encodeURIComponent(curso.id_curso)}`}
+                                />
+                            </Col>))}
+                        
                     </Row>
                     <h2 className='titulo-datos'>Datos</h2>
                     <Row className='borde'>
