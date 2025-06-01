@@ -1,7 +1,6 @@
 import '../styles/Navegador.css'
 
-import { Nav } from 'react-bootstrap/Nav'
-import { Image } from 'react-bootstrap/Image';
+import { Nav, Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 export const Navegador = ({icono, user, dato}) => {
