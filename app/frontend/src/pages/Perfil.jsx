@@ -4,7 +4,8 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
-import { Boton } from '../components/Boton'
+//import { Boton } from '../components/Boton'
+import { BotonCurso } from '../components/BotonCurso'
 
 import Admin from '../assets/admin.png'
 import Estudiante from '../assets/estudiante.png'
@@ -18,16 +19,21 @@ export const Perfil = () => {
     const navigate = useNavigate();
 
     const nombreUsuario = localStorage.getItem('nombre_usuario');
-    const rol = localStorage.getItem('rol');
+    const rol = JSON.parse(localStorage.getItem('rol'))
+    const rolNormalizado = Array.isArray(rol) ? rol[0] : rol
 
+    let imagenPerfil = Estudiante
+    if (rolNormalizado === 'admin') imagenPerfil = Admin
+    else if (rolNormalizado === 'profesor') imagenPerfil = Profesor
+    
     return (
         <Container fluid className='contenedor-fluid'>
             <Row className='contenedor'>
                 <Col className="d-flex flex-column align-items-center text-center carta-perfil" md={5}>
-                    <Image src={Admin} roundedCircle className='icono'/>
+                    <Image src={imagenPerfil} roundedCircle className='icono'/>
                     <div className='datos'>
-                        <h5 className='nombre-user'>{nombreUsuario}</h5>
-                        <h6 className='rol-user'>{rol}</h6>
+                        <h5 className='nombre-user'>{localStorage.getItem('nombre_usuario')}</h5>
+                        <h6 className='rol-user'>{rolNormalizado}</h6>
                     </div>
                 </Col>
                 <Col md={{ span: 5, offset: 1 }}>
@@ -35,9 +41,10 @@ export const Perfil = () => {
                     <Row md={3} className='borde'>
                         {data?.map((curso) => (
                             <Col key={curso.id_curso}>
-                                <Boton 
+                                <BotonCurso 
                                     texto={curso.nombre} 
-                                    ruta={`/alumnos?curso=${encodeURIComponent(curso.nombre)}&id=${encodeURIComponent(curso.id_curso)}`}
+                                    cursoId={curso.id_curso}
+                                    rol={rol} // Pasamos el rol como prop
                                 />
                             </Col>))}
                         

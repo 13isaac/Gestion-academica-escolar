@@ -9,7 +9,7 @@ class Profesor(db.Model):
     apellido = db.Column(db.String(50), nullable = False)
     correo = db.Column(db.String(100), unique = True, nullable = False)
     especialidad = db.Column(db.String(50))
-    estado = db.Column(db.Enum("Activo","Inactivo"), default = "Activo")
+    estado = db.Column(db.Enum("activo","inactivo"), default = "activo")
 
     usuario = db.relationship('Usuario', backref='profesor')
 

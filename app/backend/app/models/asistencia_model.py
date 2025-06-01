@@ -8,7 +8,7 @@ class Asistencia(db.Model):
     id_curso = db.Column(db.Integer, db.ForeignKey("cursos.id_curso", ondelete = "CASCADE"), nullable = False)
     fecha = db.Column(db.DateTime,default=datetime.now, nullable=False)
     sesion = db.Column(db.String(50), nullable = False)
-    estado_asistencia = db.Column(db.Enum("Presente", "Ausente", "Justificado"), nullable=False, default="Presente")
+    estado_asistencia = db.Column(db.Enum("presente", "ausente", "justificado"), nullable=False, default="presente")
 
 
     def __init__(self,id_alumno,id_curso, fecha, sesion, estado_asistencia):

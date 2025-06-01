@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
+.detalle-container {
+  background-color: rgb(31, 31, 31);
+  color: #d7d0c3;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+.card-detalle {
+  background-color: #1f1f1f;
+  border: 1px solid #c3d7c3;
+  border-radius: 12px;
+  color: #f2c48e;
+  font-family: "Alfa Slab One", serif;
+}
+
+.card-detalle .card-header {
+  font-size: 28px;
+  color: #f2c48e;
+  border-bottom: 1px solid #a78763;
+  background-color: #1f1f1f;
+}
+
+.label-dato {
+  font-size: 18px;
+  color: #a78763;
+  font-family: "Alfa Slab One", serif;
+}
+
+.table-dark-custom {
+  background-color: #2b2b2b;
+  color: #f2c48e;
+}
+
+.table-dark-custom thead {
+  background-color: #3a3a3a;
+  color: #a78763;
+  font-family: "Alfa Slab One", serif;
+}
+
+.table-dark-custom td {
+  color: #d7d0c3;
+}
+
+.btn-volver {
+  background-color: #a78763;
+  border: none;
+  font-family: "Alfa Slab One", serif;
+}
+.btn-volver:hover {
+  background-color: #f2c48e;
+  color: black;
+}

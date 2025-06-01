@@ -9,6 +9,8 @@ class Curso(db.Model):
     nivel = db.Column(db.Enum("primaria", "secundaria"), nullable=False, default="primaria")
     anio_academico = db.Column(db.Integer, nullable = False)
 
+    profesor = db.relationship("Profesor", backref="cursos")
+
     def __init__(self, id_profesor, nombre, descripcion, nivel, anio_academico):
         self.id_profesor = id_profesor
         self.nombre = nombre
