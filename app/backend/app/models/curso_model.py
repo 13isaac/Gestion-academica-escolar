@@ -6,7 +6,7 @@ class Curso(db.Model):
     id_profesor = db.Column(db.Integer, db.ForeignKey("profesores.id_profesor", ondelete = "CASCADE"), nullable = False)
     nombre = db.Column(db.String(50), unique = True, nullable = False)
     descripcion = db.Column(db.String(250), nullable = False)
-    nivel = db.Column(db.Enum("Primaria", "Secundaria"), nullable=False, default="Primaria")
+    nivel = db.Column(db.Enum("primaria", "secundaria"), nullable=False, default="primaria")
     anio_academico = db.Column(db.Integer, nullable = False)
 
     def __init__(self, id_profesor, nombre, descripcion, nivel, anio_academico):
