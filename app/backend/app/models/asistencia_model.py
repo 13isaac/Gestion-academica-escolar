@@ -45,4 +45,8 @@ class Asistencia(db.Model):
 
     def delete(self):
         db.session.delete(self)
-        db.session.commit  
+        db.session.commit
+
+    @staticmethod
+    def get_by_id_alumno_id_curso(id_curso, id_alumno):
+        return Asistencia.query.filter_by(id_alumno=id_alumno, id_curso=id_curso).all()
