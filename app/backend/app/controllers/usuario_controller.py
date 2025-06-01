@@ -45,3 +45,18 @@ def login():
     
     else:
         return jsonify({"error":"Crendenciales inválidas"}), 401
+    
+@usuario_bp.route("/usuarios", methods=["GET"])
+def listar_usuarios():
+    usuarios = Usuario.query.all()  # Obtener todos los usuarios
+    lista_usuarios = []
+
+    for u in usuarios:
+        lista_usuarios.append({
+            "id_usuario": u.id_usuario,
+            "nombre_usuario": u.nombre_usuario,
+            "rol": u.rol
+            # No incluir la contraseña por seguridad
+        })
+
+    return jsonify(lista_usuarios), 200
