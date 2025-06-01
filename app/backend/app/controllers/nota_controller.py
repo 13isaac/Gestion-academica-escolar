@@ -22,8 +22,8 @@ def get_notas():
 
 #Obtener por ID
 @nota_bp.route("/notas/<int:id>", methods=["GET"])
-#@jwt_required
-#@roles_required(rol=["admin", "profesor", "user"])
+@jwt_required
+@roles_required(rol=["admin", "profesor", "user"])
 def get_nota(id):
     nota = Notas.get_by_id(id)
     if nota:
@@ -32,8 +32,8 @@ def get_nota(id):
 
 #Crear nueva Nota
 @nota_bp.route("/notas", methods = ["POST"])
-#@jwt_required
-#@roles_required(rol=["profesor", "admin"])
+@jwt_required
+@roles_required(rol=["profesor", "admin"])
 def create_nota():
     data = request.json
     id_alumno = data.get("id_alumno")
@@ -53,8 +53,8 @@ def create_nota():
 
 #Actualizar Nota
 @nota_bp.route("/notas/<int:id>", methods=["PUT"])
-#@jwt_required
-#@roles_required(rol=["profesor", "admin"])
+@jwt_required
+@roles_required(rol=["profesor", "admin"])
 def update_nota(id):
     nota = Notas.get_by_id(id)
 
@@ -74,8 +74,8 @@ def update_nota(id):
 
 #Eliminar Nota
 @nota_bp.route("/notas/<int:id>", methods=["DELETE"])
-#@jwt_required
-#@roles_required(rol=["profesor", "admin"])
+@jwt_required
+@roles_required(rol=["profesor", "admin"])
 def delete_nota(id):
     nota = Notas.get_by_id(id)
 
@@ -87,8 +87,8 @@ def delete_nota(id):
     return "", 204
 
 @nota_bp.route("/notas/cursos/<int:id_curso>/alumnos/<int:id_alumno>", methods=["GET"])
-#@jwt_required
-#@roles_required(rol=["profesor", "admin"])
+@jwt_required
+@roles_required(rol=["profesor", "admin"])
 def get_notas_alumnos(id_curso, id_alumno):
     curso = Curso.get_by_id(id_curso)
     alumno = Alumno.get_by_id(id_alumno)
