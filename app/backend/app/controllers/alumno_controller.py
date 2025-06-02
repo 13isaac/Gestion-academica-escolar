@@ -10,9 +10,12 @@ from ..models.curso_model import Curso
 from ..models.nota_model import Notas
 from ..models.profesor_model import Profesor
 from app.utils.decorators import jwt_required, roles_required
+from app.models.matricula_model import Matricula
+from app.views.matricula_view import render_alumnos_curso
 
 from app.models.alumno_model import Alumno
 from app.views.alumno_view import render_alumno_list, render_alumno
+
 
 alumno_bp = Blueprint("alumno",__name__)
 
@@ -36,10 +39,12 @@ def get_alumno(id):
 @jwt_required
 @roles_required(rol = ["admin","profesor"])
 def get_alumnos_por_curso(id):
-    get_response = requests.request(method="GET", url=f'http://127.0.0.1:5000/api/cursos/{id}/alumnos')
-    response = get_response.json()
+    curso = Curso.get_by_id(id)
+    if curso:
+        matriculas_curso = Matricula.get_by_id_curso(id)
+        return jsonify(render_alumnos_curso(matriculas_curso))
     alumnos = []
-    for alumno in response:
+    for alumno in matriculas_curso:
         alumnos.append(Alumno.get_by_id(alumno["id_alumno"]))
     
     return jsonify(render_alumno_list(alumnos))

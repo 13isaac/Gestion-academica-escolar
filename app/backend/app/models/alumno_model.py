@@ -9,7 +9,7 @@ class Alumno(db.Model):
     ci = db.Column(db.String(20), nullable=False, unique=True)
     fecha_nacimiento = db.Column(db.Date, nullable = False)
     correo = db.Column(db.String(120), nullable = False, unique = True)
-    estado = db.Column(db.Enum("activo", "inactivo", name="estado_alumno"), nullable=False, default="activo")
+    estado = db.Column(db.Enum("Activo", "Inactivo", name="estado_alumno"), nullable=False, default="Activo")
 
     def __init__(self,id_usuario,nombre,apellido,ci,fecha_nacimiento,correo,estado):
         self.id_usuario = id_usuario
@@ -31,3 +31,7 @@ class Alumno(db.Model):
     @staticmethod
     def get_by_id(id):
         return Alumno.query.get(id)
+    
+    @staticmethod
+    def get_by_id_user(id_usuario):
+        return Alumno.query.filter_by(id_usuario=id_usuario).first()

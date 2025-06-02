@@ -20,3 +20,12 @@ def render_curso(curso):
         "nivel":curso.nivel,
         "anio_academico":curso.anio_academico
     }
+
+def render_cursos_profesores(lista):
+    return [
+        {
+            "id_profesor":matricula.id_profesor,
+            "id_curso":matricula.id_curso,
+        }
+        for matricula in lista
+    ]

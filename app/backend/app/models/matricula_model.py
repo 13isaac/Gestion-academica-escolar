@@ -27,3 +27,9 @@ class Matricula(db.Model):
     @staticmethod
     def get_by_id_curso(id_curso):
         return Matricula.query.filter_by(id_curso=id_curso).all()
+    
+    @staticmethod
+    def get_by_id_alumno(id_alumno):
+        return Matricula.query.filter_by(id_alumno=id_alumno).all()
+    
+    

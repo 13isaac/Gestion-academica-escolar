@@ -5,7 +5,7 @@ class Notas(db.Model):
     id_nota = db.Column(db.Integer, primary_key=True)
     id_alumno = db.Column(db.Integer, db.ForeignKey("alumnos.id_alumno", ondelete = "CASCADE"), nullable = False)
     id_curso = db.Column(db.Integer, db.ForeignKey("cursos.id_curso", ondelete = "CASCADE"), nullable = False)
-    evaluacion = db.Column(db.Enum("parcial","final","trabajo"), default = "trabajo")
+    evaluacion = db.Column(db.Enum("Parcial","Final","Trabajo"), default = "Trabajo")
     tipo_evaluacion = db.Column(db.String(50), nullable = False)
     calificacion = db.Column(db.Float, nullable=False) #validar
     fecha = db.Column(db.DateTime, nullable=False)

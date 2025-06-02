@@ -32,3 +32,7 @@ class Profesor(db.Model):
     @staticmethod
     def get_by_id(id):
         return Profesor.query.get(id)
+    
+    @staticmethod
+    def get_by_id_user(id_usuario):
+        return Alumno.query.filter_by(id_usuario=id_usuario).first()

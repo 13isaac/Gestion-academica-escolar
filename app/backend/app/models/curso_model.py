@@ -6,7 +6,7 @@ class Curso(db.Model):
     id_profesor = db.Column(db.Integer, db.ForeignKey("profesores.id_profesor", ondelete = "CASCADE"), nullable = False)
     nombre = db.Column(db.String(50), unique = True, nullable = False)
     descripcion = db.Column(db.String(250), nullable = False)
-    nivel = db.Column(db.Enum("primaria", "secundaria"), nullable=False, default="primaria")
+    nivel = db.Column(db.Enum("Primaria", "Secundaria"), nullable=False, default="Primaria")
     anio_academico = db.Column(db.Integer, nullable = False)
 
     profesor = db.relationship("Profesor", backref="cursos")
@@ -29,3 +29,7 @@ class Curso(db.Model):
     @staticmethod
     def get_by_id(id):
         return Curso.query.get(id)
+    
+    @staticmethod
+    def get_by_id_profesor(id_profesor):
+        return Curso.query.filter_by(id_profesor=id_profesor).all()

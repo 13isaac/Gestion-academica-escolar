@@ -25,3 +25,16 @@ def render_alumnos_curso(matriculas):
         }
         for matricula in matriculas
     ]
+
+def render_curso_list(cursos):
+    return[
+        {
+            "id_curso":curso.id_curso,
+            "id_profesor":curso.id_profesor,
+            "nombre":curso.nombre,
+            "descripcion":curso.descripcion,
+            "nivel":curso.nivel,
+            "anio_academico":curso.anio_academico
+        }
+        for curso in cursos
+    ]

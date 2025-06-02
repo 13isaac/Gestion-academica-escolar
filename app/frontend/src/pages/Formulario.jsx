@@ -4,133 +4,168 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
-import { useSearchParams } from 'react-router-dom'
-import { useFetch } from '../hooks/useFetch'
+import Alert from 'react-bootstrap/Alert'
+import Spinner from 'react-bootstrap/Spinner'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 export const Formulario = () => {
     const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
     const id_alumno = searchParams.get('id_alumno')
     const id_curso = searchParams.get('id_curso')
-    const { data: alumnoData } = useFetch(`http://127.0.0.1:5000/api/alumnos/${encodeURIComponent(id_alumno)}`);
-    const { data: cursoData } = useFetch(`http://127.0.0.1:5000/api/notas/cursos/${encodeURIComponent(id_curso)}/alumnos/${encodeURIComponent(id_alumno)}`);
     
-    // Estado para el tipo de evaluación seleccionado
-    const [tipoEvaluacionSeleccionado, setTipoEvaluacionSeleccionado] = useState('Parcial');
+    // Estados para datos y carga
+    const [alumnoData, setAlumnoData] = useState(null)
+    const [cursoData, setCursoData] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
     
-    // Estado para las notas editables
-    const [notasEditables, setNotasEditables] = useState([]);
-    
-    // Estado para las asistencias editables
-    const [asistenciasEditables, setAsistenciasEditables] = useState([]);
-    
-    // Estado para nueva nota
+    // Estados para formularios
+    const [tipoEvaluacionSeleccionado, setTipoEvaluacionSeleccionado] = useState('Parcial')
+    const [notasEditables, setNotasEditables] = useState([])
+    const [asistenciasEditables, setAsistenciasEditables] = useState([])
     const [nuevaNota, setNuevaNota] = useState({
         evaluacion: 'Parcial',
         tipo_evaluacion: '',
         calificacion: '',
         fecha: new Date().toISOString().slice(0, 16)
-    });
-
-    // Estado para nueva asistencia
+    })
     const [nuevaAsistencia, setNuevaAsistencia] = useState({
         fecha: new Date().toISOString().slice(0, 16),
         sesion: '',
         estado_asistencia: 'Presente'
-    });
+    })
+    const [mostrarFormularioNuevaNota, setMostrarFormularioNuevaNota] = useState(false)
+    const [mostrarFormularioNuevaAsistencia, setMostrarFormularioNuevaAsistencia] = useState(false)
 
-    // Estados para controlar formularios desplegables
-    const [mostrarFormularioNuevaNota, setMostrarFormularioNuevaNota] = useState(false);
-    const [mostrarFormularioNuevaAsistencia, setMostrarFormularioNuevaAsistencia] = useState(false);
+    // Función para hacer peticiones autorizadas
+    const fetchWithAuth = async (url, options = {}) => {
+        const token = localStorage.getItem('token')
+        if (!token) {
+            navigate('/')
+            throw new Error('No autenticado')
+        }
 
-    // Cargar datos iniciales cuando la data llegue
+        try {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    ...options.headers,
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            if (response.status === 401) {
+                localStorage.removeItem('token')
+                navigate('/')
+                throw new Error('Sesión expirada')
+            }
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.error || 'Error en la solicitud')
+            }
+
+            return await response.json()
+        } catch (err) {
+            setError(err.message)
+            throw err
+        }
+    }
+
+    // Cargar datos iniciales
     useEffect(() => {
-        if (cursoData) {
-            // Filtrar notas según el tipo de evaluación seleccionado
-            const notasFiltradas = cursoData.notas?.filter(nota => nota.evaluacion === tipoEvaluacionSeleccionado) || [];
-            setNotasEditables(notasFiltradas);
-            
-            // Cargar todas las asistencias
-            setAsistenciasEditables(cursoData.asistencias || []);
-            
-            // Reiniciar formularios
-            setNuevaNota({
-                evaluacion: tipoEvaluacionSeleccionado,
-                tipo_evaluacion: '',
-                calificacion: '',
-                fecha: new Date().toISOString().slice(0, 16)
-            });
-            setNuevaAsistencia({
-                fecha: new Date().toISOString().slice(0, 16),
-                sesion: '',
-                estado_asistencia: 'Presente'
-            });
-        }
-    }, [cursoData, tipoEvaluacionSeleccionado]);
+        const loadData = async () => {
+            try {
+                setLoading(true)
+                setError(null)
+                
+                const [alumnoResponse, cursoResponse] = await Promise.all([
+                    fetchWithAuth(`http://127.0.0.1:5000/api/alumnos/${id_alumno}`),
+                    fetchWithAuth(`http://127.0.0.1:5000/api/notas/cursos/${id_curso}/alumnos/${id_alumno}`)
+                ])
 
-    // Manejar cambio en el select de evaluación
+                setAlumnoData(alumnoResponse)
+                setCursoData(cursoResponse)
+                
+                // Filtrar notas según el tipo de evaluación seleccionado
+                const notasFiltradas = cursoResponse.notas?.filter(nota => nota.evaluacion === tipoEvaluacionSeleccionado) || []
+                setNotasEditables(notasFiltradas)
+                setAsistenciasEditables(cursoResponse.asistencias || [])
+                
+            } catch (err) {
+                console.error("Error cargando datos:", err)
+                setError(err.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        loadData()
+    }, [id_alumno, id_curso, navigate, tipoEvaluacionSeleccionado])
+
+    // Manejadores de cambios
     const handleEvaluacionChange = (e) => {
-        const value = e.target.value;
-        setTipoEvaluacionSeleccionado(value);
-        setNuevaNota(prev => ({ ...prev, evaluacion: value }));
-    };
+        const value = e.target.value
+        setTipoEvaluacionSeleccionado(value)
+        setNuevaNota(prev => ({ ...prev, evaluacion: value }))
+        
+        // Filtrar notas cuando cambia el tipo de evaluación
+        if (cursoData) {
+            const notasFiltradas = cursoData.notas?.filter(nota => nota.evaluacion === value) || []
+            setNotasEditables(notasFiltradas)
+        }
+    }
 
-    // Manejar cambios en las notas existentes
     const handleNotaExistenteChange = (index, field, value) => {
-        const updatedNotas = [...notasEditables];
+        const updatedNotas = [...notasEditables]
         
-        // Validar calificación si es el campo
         if (field === 'calificacion') {
-            value = value.replace(/[^0-9]/g, '');
+            value = value.replace(/[^0-9]/g, '')
             if (value !== '' && (parseInt(value) < 0 || parseInt(value) > 100)) {
-                return;
+                return
             }
         }
         
-        updatedNotas[index][field] = value;
-        setNotasEditables(updatedNotas);
-    };
+        updatedNotas[index][field] = value
+        setNotasEditables(updatedNotas)
+    }
 
-    // Manejar cambios en las asistencias existentes
     const handleAsistenciaChange = (index, field, value) => {
-        const updatedAsistencias = [...asistenciasEditables];
-        updatedAsistencias[index][field] = value;
-        setAsistenciasEditables(updatedAsistencias);
-    };
+        const updatedAsistencias = [...asistenciasEditables]
+        updatedAsistencias[index][field] = value
+        setAsistenciasEditables(updatedAsistencias)
+    }
 
-    // Manejar cambios en la nueva nota
     const handleNuevaNotaChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         
-        // Validar calificación
         if (name === 'calificacion') {
-            let val = value.replace(/[^0-9]/g, '');
+            let val = value.replace(/[^0-9]/g, '')
             if (val !== '' && (parseInt(val) < 0 || parseInt(val) > 100)) {
-                return;
+                return
             }
-            setNuevaNota(prev => ({ ...prev, [name]: val }));
+            setNuevaNota(prev => ({ ...prev, [name]: val }))
         } else {
-            setNuevaNota(prev => ({ ...prev, [name]: value }));
+            setNuevaNota(prev => ({ ...prev, [name]: value }))
         }
-    };
+    }
 
-    // Manejar cambios en la nueva asistencia
     const handleNuevaAsistenciaChange = (e) => {
-        const { name, value } = e.target;
-        setNuevaAsistencia(prev => ({ ...prev, [name]: value }));
-    };
+        const { name, value } = e.target
+        setNuevaAsistencia(prev => ({ ...prev, [name]: value }))
+    }
 
-    // Actualizar notas existentes
+    // Funciones para enviar datos
     const handleActualizarNotas = async () => {
         try {
-            // Actualizar notas existentes
+            setLoading(true)
+            
             for (const nota of notasEditables) {
-                await fetch(`http://127.0.0.1:5000/api/notas/${nota.id_nota}`, {
+                await fetchWithAuth(`http://127.0.0.1:5000/api/notas/${nota.id_nota}`, {
                     method: 'PUT',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
                     body: JSON.stringify({
                         id_alumno: id_alumno,
                         id_curso: id_curso,
@@ -139,27 +174,25 @@ export const Formulario = () => {
                         calificacion: parseFloat(nota.calificacion),
                         fecha: nota.fecha
                     })
-                });
+                })
             }
             
-            alert('Notas actualizadas exitosamente!');
+            alert('Notas actualizadas exitosamente!')
         } catch (error) {
-            console.error('Error al actualizar notas:', error);
-            alert('Error al actualizar las notas');
+            console.error('Error al actualizar notas:', error)
+            alert(`Error: ${error.message}`)
+        } finally {
+            setLoading(false)
         }
-    };
+    }
 
-    // Actualizar asistencias existentes
     const handleActualizarAsistencias = async () => {
         try {
-            // Actualizar asistencias existentes
+            setLoading(true)
+            
             for (const asistencia of asistenciasEditables) {
-                await fetch(`http://127.0.0.1:5000/api/asistencias/${asistencia.id_asistencia}`, {
+                await fetchWithAuth(`http://127.0.0.1:5000/api/asistencias/${asistencia.id_asistencia}`, {
                     method: 'PUT',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
                     body: JSON.stringify({
                         id_alumno: id_alumno,
                         id_curso: id_curso,
@@ -167,28 +200,27 @@ export const Formulario = () => {
                         sesion: asistencia.sesion,
                         estado_asistencia: asistencia.estado_asistencia
                     })
-                });
+                })
             }
             
-            alert('Asistencias actualizadas exitosamente!');
+            alert('Asistencias actualizadas exitosamente!')
         } catch (error) {
-            console.error('Error al actualizar asistencias:', error);
-            alert('Error al actualizar las asistencias');
+            console.error('Error al actualizar asistencias:', error)
+            alert(`Error: ${error.message}`)
+        } finally {
+            setLoading(false)
         }
-    };
+    }
 
-    // Agregar nueva nota
     const handleSubmitNuevaNota = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         
         try {
+            setLoading(true)
+            
             if (nuevaNota.calificacion && nuevaNota.tipo_evaluacion && nuevaNota.fecha) {
-                const response = await fetch(`http://127.0.0.1:5000/api/notas`, {
+                await fetchWithAuth(`http://127.0.0.1:5000/api/notas`, {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
                     body: JSON.stringify({
                         id_alumno: id_alumno,
                         id_curso: id_curso,
@@ -197,50 +229,44 @@ export const Formulario = () => {
                         calificacion: parseFloat(nuevaNota.calificacion),
                         fecha: nuevaNota.fecha
                     })
-                });
+                })
                 
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
-                }
+                // Recargar datos
+                const updatedData = await fetchWithAuth(`http://127.0.0.1:5000/api/notas/cursos/${id_curso}/alumnos/${id_alumno}`)
+                setCursoData(updatedData)
+                const notasFiltradas = updatedData.notas?.filter(nota => nota.evaluacion === tipoEvaluacionSeleccionado) || []
+                setNotasEditables(notasFiltradas)
                 
-                // Actualizar la lista de notas
-                const updatedResponse = await fetch(`http://127.0.0.1:5000/api/notas/cursos/${encodeURIComponent(id_curso)}/alumnos/${encodeURIComponent(id_alumno)}`);
-                const updatedData = await updatedResponse.json();
-                const notasFiltradas = updatedData.notas.filter(nota => nota.evaluacion === tipoEvaluacionSeleccionado);
-                setNotasEditables(notasFiltradas);
-                setAsistenciasEditables(updatedData.asistencias || []);
-                
-                // Resetear el formulario y cerrarlo
+                // Resetear formulario
                 setNuevaNota({
                     evaluacion: tipoEvaluacionSeleccionado,
                     tipo_evaluacion: '',
                     calificacion: '',
                     fecha: new Date().toISOString().slice(0, 16)
-                });
-                setMostrarFormularioNuevaNota(false);
+                })
+                setMostrarFormularioNuevaNota(false)
                 
-                alert('Nueva nota agregada exitosamente!');
+                alert('Nueva nota agregada exitosamente!')
             } else {
-                alert('Por favor complete todos los campos requeridos');
+                alert('Por favor complete todos los campos requeridos')
             }
         } catch (error) {
-            console.error('Error al agregar nueva nota:', error);
-            alert('Error al agregar la nueva nota');
+            console.error('Error al agregar nueva nota:', error)
+            alert(`Error: ${error.message}`)
+        } finally {
+            setLoading(false)
         }
-    };
+    }
 
-    // Agregar nueva asistencia
     const handleSubmitNuevaAsistencia = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
         
         try {
+            setLoading(true)
+            
             if (nuevaAsistencia.sesion && nuevaAsistencia.fecha && nuevaAsistencia.estado_asistencia) {
-                const response = await fetch(`http://127.0.0.1:5000/api/asistencias`, {
+                await fetchWithAuth(`http://127.0.0.1:5000/api/asistencias`, {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
                     body: JSON.stringify({
                         id_alumno: id_alumno,
                         id_curso: id_curso,
@@ -248,42 +274,76 @@ export const Formulario = () => {
                         sesion: nuevaAsistencia.sesion,
                         estado_asistencia: nuevaAsistencia.estado_asistencia
                     })
-                });
+                })
                 
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
-                }
+                // Recargar datos
+                const updatedData = await fetchWithAuth(`http://127.0.0.1:5000/api/notas/cursos/${id_curso}/alumnos/${id_alumno}`)
+                setCursoData(updatedData)
+                setAsistenciasEditables(updatedData.asistencias || [])
                 
-                // Actualizar la lista de asistencias
-                const updatedResponse = await fetch(`http://127.0.0.1:5000/api/notas/cursos/${encodeURIComponent(id_curso)}/alumnos/${encodeURIComponent(id_alumno)}`);
-                const updatedData = await updatedResponse.json();
-                setNotasEditables(updatedData.notas?.filter(nota => nota.evaluacion === tipoEvaluacionSeleccionado) || []);
-                setAsistenciasEditables(updatedData.asistencias || []);
-                
-                // Resetear el formulario y cerrarlo
+                // Resetear formulario
                 setNuevaAsistencia({
                     fecha: new Date().toISOString().slice(0, 16),
                     sesion: '',
                     estado_asistencia: 'Presente'
-                });
-                setMostrarFormularioNuevaAsistencia(false);
+                })
+                setMostrarFormularioNuevaAsistencia(false)
                 
-                alert('Nueva asistencia agregada exitosamente!');
+                alert('Nueva asistencia agregada exitosamente!')
             } else {
-                alert('Por favor complete todos los campos requeridos');
+                alert('Por favor complete todos los campos requeridos')
             }
         } catch (error) {
-            console.error('Error al agregar nueva asistencia:', error);
-            alert('Error al agregar la nueva asistencia');
+            console.error('Error al agregar nueva asistencia:', error)
+            alert(`Error: ${error.message}`)
+        } finally {
+            setLoading(false)
         }
-    };
+    }
 
-    // Formatear fecha para mostrarla en inputs tipo datetime-local
+    // Formatear fecha para inputs
     const formatDateForInput = (dateString) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toISOString().slice(0, 16);
-    };
+        if (!dateString) return ''
+        const date = new Date(dateString)
+        return date.toISOString().slice(0, 16)
+    }
+
+    // Mostrar estados de carga y error
+    if (loading && !alumnoData) {
+        return (
+            <Container className="text-center mt-5">
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Cargando...</span>
+                </Spinner>
+                <p>Cargando datos del alumno...</p>
+            </Container>
+        )
+    }
+
+    if (error) {
+        return (
+            <Container className="mt-5">
+                <Alert variant="danger">
+                    <Alert.Heading>Error</Alert.Heading>
+                    <p>{error}</p>
+                    <Button onClick={() => window.location.reload()}>Reintentar</Button>
+                    <Button variant="secondary" onClick={() => navigate('/perfil')} className="ms-2">
+                        Volver al perfil
+                    </Button>
+                </Alert>
+            </Container>
+        )
+    }
+
+    if (!alumnoData || !cursoData) {
+        return (
+            <Container className="mt-5">
+                <Alert variant="warning">
+                    No se encontraron datos para mostrar
+                </Alert>
+            </Container>
+        )
+    }
 
     return (
         <Container fluid className='d-flex justify-content-center align-items-center min-vh-100 p-0 m-0'>
@@ -291,11 +351,9 @@ export const Formulario = () => {
                 <Row>
                     <Col>
                         <h3 className='bienvenida'>Editar Datos del Alumno</h3>
-                        {alumnoData && (
-                            <p className="text-muted textos">
-                                <strong>Editando:</strong> {alumnoData.nombre} {alumnoData.apellido} (CI: {alumnoData.ci})
-                            </p>
-                        )}
+                        <p className="text-muted textos">
+                            <strong>Editando:</strong> {alumnoData.nombre} {alumnoData.apellido} (CI: {alumnoData.ci})
+                        </p>
                     </Col>
                 </Row>
 
@@ -304,7 +362,6 @@ export const Formulario = () => {
                     <div className='mb-4 border-bottom pb-3'>
                         <h4 className='mb-3 textos'>Notas</h4>
                         
-                        {/* Selector de tipo de evaluación */}
                         <Form.Group className="mb-3 textos" controlId="formEvaluacion">
                             <Form.Label>Tipo de Evaluación</Form.Label>
                             <Form.Select
@@ -312,6 +369,7 @@ export const Formulario = () => {
                                 onChange={handleEvaluacionChange}
                                 required
                                 className="input-rectangulo"
+                                disabled={loading}
                             >
                                 <option value="Parcial">Parcial</option>
                                 <option value="Trabajo">Trabajo</option>
@@ -319,7 +377,6 @@ export const Formulario = () => {
                             </Form.Select>
                         </Form.Group>
 
-                        {/* Lista de notas existentes */}
                         {notasEditables.length > 0 ? (
                             <div className="mb-4">
                                 <h5 className='textos'>Notas existentes:</h5>
@@ -333,6 +390,7 @@ export const Formulario = () => {
                                                 onChange={(e) => handleNotaExistenteChange(index, 'tipo_evaluacion', e.target.value)}
                                                 required
                                                 className="input-rectangulo"
+                                                disabled={loading}
                                             />
                                         </Form.Group>
                                         
@@ -346,6 +404,7 @@ export const Formulario = () => {
                                                 max="100"
                                                 required
                                                 className="input-rectangulo"
+                                                disabled={loading}
                                             />
                                         </Form.Group>
                                         
@@ -357,18 +416,18 @@ export const Formulario = () => {
                                                 onChange={(e) => handleNotaExistenteChange(index, 'fecha', e.target.value)}
                                                 required
                                                 className="input-rectangulo"
+                                                disabled={loading}
                                             />
                                         </Form.Group>
                                     </div>
                                 ))}
                                 <div className="d-flex justify-content-center">
                                     <Button 
-                                        type="button"
-                                        className='m-1 boton-carta-verde'
-                                        variant="outline-success" 
+                                        variant="success"
                                         onClick={handleActualizarNotas}
+                                        disabled={loading}
                                     >
-                                        Actualizar Notas
+                                        {loading ? 'Actualizando...' : 'Actualizar Notas'}
                                     </Button>
                                 </div>
                             </div>
@@ -381,18 +440,17 @@ export const Formulario = () => {
                             </Row>
                         )}
 
-                        {/* Botón para agregar nueva nota */}
                         <div className="mb-3 text-center">
                             <Button 
-                                variant="outline-primary"
+                                variant="primary"
                                 onClick={() => setMostrarFormularioNuevaNota(!mostrarFormularioNuevaNota)}
                                 className="mb-3"
+                                disabled={loading}
                             >
                                 {mostrarFormularioNuevaNota ? 'Ocultar formulario' : 'Agregar nueva nota'}
                             </Button>
                         </div>
 
-                        {/* Formulario para agregar nueva nota (desplegable) */}
                         {mostrarFormularioNuevaNota && (
                             <div className="mb-4 p-3 border rounded bg-light">
                                 <h5 className='text-center'>Agregar nueva nota</h5>
@@ -405,6 +463,7 @@ export const Formulario = () => {
                                             onChange={handleNuevaNotaChange}
                                             required
                                             className="input-rectangulo"
+                                            disabled={loading}
                                         >
                                             <option value="Parcial">Parcial</option>
                                             <option value="Trabajo">Trabajo</option>
@@ -422,6 +481,7 @@ export const Formulario = () => {
                                             required
                                             placeholder="Ej: Examen de Matemáticas, Proyecto Final, etc."
                                             className="input-rectangulo"
+                                            disabled={loading}
                                         />
                                     </Form.Group>
 
@@ -437,6 +497,7 @@ export const Formulario = () => {
                                             required
                                             placeholder="Ingrese la nota (0-100)"
                                             className="input-rectangulo"
+                                            disabled={loading}
                                         />
                                     </Form.Group>
 
@@ -449,22 +510,24 @@ export const Formulario = () => {
                                             onChange={handleNuevaNotaChange}
                                             required
                                             className="input-rectangulo"
+                                            disabled={loading}
                                         />
                                     </Form.Group>
 
                                     <div className="d-flex justify-content-center">
                                         <Button 
                                             type="submit"
-                                            className='m-1 boton-carta-verde'
-                                            variant="outline-success"
+                                            variant="success"
+                                            disabled={loading}
                                         >
-                                            Agregar nota
+                                            {loading ? 'Agregando...' : 'Agregar nota'}
                                         </Button>
                                         <Button 
                                             type="button"
-                                            className='m-1 boton-carta-roja'
-                                            variant="outline-danger"
+                                            variant="danger"
                                             onClick={() => setMostrarFormularioNuevaNota(false)}
+                                            className="ms-2"
+                                            disabled={loading}
                                         >
                                             Cancelar
                                         </Button>
@@ -478,18 +541,17 @@ export const Formulario = () => {
                     <div className='mb-4'>
                         <h4 className='mb-3 textos'>Asistencias</h4>
                         
-                        {/* Botón para agregar nueva asistencia */}
                         <div className="mb-3 text-center">
                             <Button 
-                                variant="outline-primary"
+                                variant="primary"
                                 onClick={() => setMostrarFormularioNuevaAsistencia(!mostrarFormularioNuevaAsistencia)}
                                 className="mb-3"
+                                disabled={loading}
                             >
                                 {mostrarFormularioNuevaAsistencia ? 'Ocultar formulario' : 'Agregar nueva asistencia'}
                             </Button>
                         </div>
 
-                        {/* Formulario para agregar nueva asistencia (desplegable) */}
                         {mostrarFormularioNuevaAsistencia && (
                             <div className="mb-4 p-3 border rounded bg-light">
                                 <h5 className='text-center'>Agregar nueva asistencia</h5>
@@ -503,6 +565,7 @@ export const Formulario = () => {
                                             onChange={handleNuevaAsistenciaChange}
                                             required
                                             className="input-rectangulo"
+                                            disabled={loading}
                                         />
                                     </Form.Group>
 
@@ -516,6 +579,7 @@ export const Formulario = () => {
                                             required
                                             placeholder="Ej: Clase teórica, Laboratorio, etc."
                                             className="input-rectangulo"
+                                            disabled={loading}
                                         />
                                     </Form.Group>
 
@@ -533,6 +597,7 @@ export const Formulario = () => {
                                                     checked={nuevaAsistencia.estado_asistencia === opcion}
                                                     onChange={handleNuevaAsistenciaChange}
                                                     inline
+                                                    disabled={loading}
                                                 />
                                             ))}
                                         </div>
@@ -541,16 +606,17 @@ export const Formulario = () => {
                                     <div className="d-flex justify-content-center">
                                         <Button 
                                             type="submit"
-                                            className='m-1 boton-carta-verde'
-                                            variant="outline-success"
+                                            variant="success"
+                                            disabled={loading}
                                         >
-                                            Agregar asistencia
+                                            {loading ? 'Agregando...' : 'Agregar asistencia'}
                                         </Button>
                                         <Button 
                                             type="button"
-                                            className='m-1 boton-carta-roja'
-                                            variant="outline-danger"
+                                            variant="danger"
                                             onClick={() => setMostrarFormularioNuevaAsistencia(false)}
+                                            className="ms-2"
+                                            disabled={loading}
                                         >
                                             Cancelar
                                         </Button>
@@ -559,7 +625,6 @@ export const Formulario = () => {
                             </div>
                         )}
 
-                        {/* Lista de asistencias existentes */}
                         {asistenciasEditables.length > 0 ? (
                             <div className="mb-4">
                                 <h5 className='textos'>Registros de asistencia:</h5>
@@ -573,6 +638,7 @@ export const Formulario = () => {
                                                 onChange={(e) => handleAsistenciaChange(index, 'fecha', e.target.value)}
                                                 required
                                                 className="input-rectangulo"
+                                                disabled={loading}
                                             />
                                         </Form.Group>
                                         
@@ -584,6 +650,7 @@ export const Formulario = () => {
                                                 onChange={(e) => handleAsistenciaChange(index, 'sesion', e.target.value)}
                                                 required
                                                 className="input-rectangulo"
+                                                disabled={loading}
                                             />
                                         </Form.Group>
                                         
@@ -601,6 +668,7 @@ export const Formulario = () => {
                                                         checked={asistencia.estado_asistencia === opcion}
                                                         onChange={() => handleAsistenciaChange(index, 'estado_asistencia', opcion)}
                                                         inline
+                                                        disabled={loading}
                                                     />
                                                 ))}
                                             </div>
@@ -609,12 +677,11 @@ export const Formulario = () => {
                                 ))}
                                 <div className="d-flex justify-content-center">
                                     <Button 
-                                        type="button"
-                                        className='m-1 boton-carta-verde'
-                                        variant="outline-success" 
+                                        variant="success"
                                         onClick={handleActualizarAsistencias}
+                                        disabled={loading}
                                     >
-                                        Actualizar Asistencias
+                                        {loading ? 'Actualizando...' : 'Actualizar Asistencias'}
                                     </Button>
                                 </div>
                             </div>
@@ -633,4 +700,4 @@ export const Formulario = () => {
     )
 }
 
-export default Formulario;
+export default Formulario
