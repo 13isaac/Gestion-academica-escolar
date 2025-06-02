@@ -32,7 +32,7 @@ export const Perfil = () => {
                 <Col className="d-flex flex-column align-items-center text-center carta-perfil" md={5}>
                     <Image src={imagenPerfil} roundedCircle className='icono'/>
                     <div className='datos'>
-                        <h5 className='nombre-user'>{localStorage.getItem('nombre_usuario')}</h5>
+                        <h5 className='nombre-user'>{nombreUsuario}</h5>
                         <h6 className='rol-user'>{rolNormalizado}</h6>
                     </div>
                 </Col>
@@ -44,7 +44,7 @@ export const Perfil = () => {
                                 <BotonCurso 
                                     texto={curso.nombre} 
                                     cursoId={curso.id_curso}
-                                    rol={rol} // Pasamos el rol como prop
+                                    rol={rol}
                                 />
                             </Col>))}
                         

@@ -6,11 +6,9 @@ export const BotonCurso = ({ texto, cursoId, rol }) => {
     const navigate = useNavigate()
     
     const handleClick = () => {
-        // Admin puede ver ambas vistas, por defecto va a detalle
-        if (rol === 'profesor') {
+        if (rol == "admin" || rol == "profesor") {
             navigate(`/alumnos?curso=${encodeURIComponent(texto)}&id=${cursoId}`)
         } else {
-            // Para 'user' (estudiante) y 'admin'
             navigate(`/detallecurso/${cursoId}`)
         }
     }

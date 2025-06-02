@@ -1,54 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
-
-.detalle-container {
-  background-color: rgb(31, 31, 31);
-  color: #d7d0c3;
-  padding: 2rem;
-  min-height: 100vh;
+.curso-container {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #5c5c5c;
+  border-radius: 8px;
 }
 
-.card-detalle {
-  background-color: #1f1f1f;
-  border: 1px solid #c3d7c3;
-  border-radius: 12px;
-  color: #f2c48e;
+.curso-card {
+  border: 2px solid #000000;
+  background-color: #c4c4c4;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.curso-titulo {
+  color: #693f12;
+  font-size: 52px;
   font-family: "Alfa Slab One", serif;
+  text-decoration: underline;
 }
 
-.card-detalle .card-header {
-  font-size: 28px;
-  color: #f2c48e;
-  border-bottom: 1px solid #a78763;
-  background-color: #1f1f1f;
+.curso-descripcion {
+  color: rgb(0, 0, 0);
+  font-size: 17px;
 }
-
-.label-dato {
-  font-size: 18px;
-  color: #a78763;
-  font-family: "Alfa Slab One", serif;
+      
+.subtitulos {
+  color: #330e05;
+  font-size: 20px;
+  text-decoration: underline;
 }
-
-.table-dark-custom {
-  background-color: #2b2b2b;
-  color: #f2c48e;
+        
+.info-caja {
+  background-color: #5c5c5c8e;
 }
-
-.table-dark-custom thead {
-  background-color: #3a3a3a;
-  color: #a78763;
-  font-family: "Alfa Slab One", serif;
+.profesor-info{
+  color: rgb(0, 0, 0);
+  font-size: 17px;
 }
-
-.table-dark-custom td {
-  color: #d7d0c3;
+        
+.asistencia-text {
+  color: rgb(0, 0, 0);
+  font-size: 17px;
 }
-
-.btn-volver {
-  background-color: #a78763;
-  border: none;
-  font-family: "Alfa Slab One", serif;
-}
-.btn-volver:hover {
-  background-color: #f2c48e;
-  color: black;
+      
+.tabla-header {
+  background-color: #5c5c5cc9 !important;
 }
