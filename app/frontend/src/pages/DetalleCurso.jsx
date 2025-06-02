@@ -7,6 +7,7 @@ import Admin from '../assets/admin.png';
 import Estudiante from '../assets/estudiante.png';
 import Profesor from '../assets/profesor.png';
 import '../styles/DetalleCurso.css'
+import Navegador from '../components/Navegador';
 
 const DetalleCurso = () => {
   const { id_curso } = useParams();
@@ -55,6 +56,7 @@ const DetalleCurso = () => {
   
   return (
   <>
+    <Navegador icono={imagenPerfil} user={nombreUsuario}/>
     <Container className="curso-container py-3">
       <Card className="curso-card">
         <Card.Body>

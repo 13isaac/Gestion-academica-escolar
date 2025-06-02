@@ -1,10 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
 
 
-.carta-perfil{
-    margin: 0;
-    
-}
+
 .nombre-user{
     color: #f2c48e !important;
     font-size: 30px;
@@ -27,11 +24,13 @@
     border: solid white 1px;
     padding: 10px;
     border-radius: 10px;
+    width: 100% !important; /* Asegura que ocupa todo el ancho */
+    margin: 0 auto !important; /* Centrado */
 }
 .botones{
-    padding-bottom: 10px;
-    padding-top: 10px;
-    font-size: 23px;
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
+    font-size: 23px !important;
 }
 .datos{
     border: solid white 1px;
@@ -58,4 +57,7 @@
 .lista{
     color: rgb(255, 255, 255);
     font-size: 23px;
+}
+.contenedor-margin{
+    margin-top: 150px;
 }

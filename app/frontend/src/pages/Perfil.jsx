@@ -9,6 +9,7 @@ import Estudiante from '../assets/estudiante.png'
 import Profesor from '../assets/profesor.png'
 import { useFetch } from '../hooks/useFetch'
 import { useNavigate } from 'react-router-dom'
+import Navegador from '../components/Navegador'
 
 export const Perfil = () => {
     const nombreUsuario = localStorage.getItem('nombre_usuario');
@@ -51,7 +52,9 @@ export const Perfil = () => {
     else if (rolNormalizado === 'profesor') imagenPerfil = Profesor;
     
     return (
-        <Container fluid className='contenedor-fluid'>
+        <>
+            <Navegador icono={imagenPerfil} user={nombreUsuario}/>
+            <Container fluid className='contenedor-fluid contenedor-margin'>
             <Row className='contenedor'>
                 <Col className="d-flex flex-column align-items-center text-center carta-perfil" md={5}>
                     <Image src={imagenPerfil} roundedCircle className='icono'/>
@@ -64,7 +67,7 @@ export const Perfil = () => {
                     <h2 className='titulo-cursos'>Cursos Disponibles</h2>
                     <Row md={3} className='borde'>
                         {data?.map((curso) => (
-                            <Col key={curso.id_curso}>
+                            <Col key={curso.id_curso} className='botones'>
                                 <BotonCurso 
                                     texto={curso.nombre} 
                                     cursoId={curso.id_curso}
@@ -73,17 +76,10 @@ export const Perfil = () => {
                             </Col>
                         ))}
                     </Row>
-                    <h2 className='titulo-datos'>Datos</h2>
-                    <Row className='borde'>
-                        <div>
-                            <ul>
-                                <li className='lista'><strong>Nombre: </strong> Isaac</li>
-                            </ul>
-                        </div>
-                    </Row>
                 </Col>
             </Row>
         </Container>
+        </>
     )
 }
 

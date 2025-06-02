@@ -9,6 +9,9 @@ import Spinner from 'react-bootstrap/Spinner'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
+import Profesor from '../assets/profesor.png'
+import Navegador from '../components/Navegador'
+
 export const Formulario = () => {
     const [searchParams] = useSearchParams()
     const navigate = useNavigate()
@@ -346,7 +349,9 @@ export const Formulario = () => {
     }
 
     return (
-        <Container fluid className='d-flex justify-content-center align-items-center min-vh-100 p-0 m-0'>
+        <>
+            <Navegador icono={Profesor} user={alumnoData.nombre}/>
+            <Container fluid className='d-flex justify-content-center align-items-center min-vh-100 p-0 m-0 container-margin'>
             <div className='p-4 rounded shadow formulario bloque-log'>
                 <Row>
                     <Col>
@@ -697,6 +702,7 @@ export const Formulario = () => {
                 </div>
             </div>
         </Container>
+        </>
     )
 }
 

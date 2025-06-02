@@ -13,14 +13,14 @@ export const BotonCurso = ({ texto, cursoId, rol }) => {
     const handleListaAlumnos = () => navigate(`/alumnos?curso=${encodeURIComponent(texto)}&id=${cursoId}`);
 
     return (
-        <div className="curso-container">
+        <div className="">
             {isAdmin ? (
                 <div className="botones-admin">
                     <button className="boton" onClick={handleDetalleCurso}>
-                        {texto} - Ver Detalle
+                        {texto}
                     </button>
                     <button className="boton" onClick={handleListaAlumnos}>
-                        {texto} - Ver Alumnos
+                        {texto}
                     </button>
                 </div>
             ) : (
@@ -28,7 +28,7 @@ export const BotonCurso = ({ texto, cursoId, rol }) => {
                     className="boton" 
                     onClick={isProfesor ? handleListaAlumnos : handleDetalleCurso}
                 >
-                    {texto}{isProfesor ? '' : 'Ver Detalle'}
+                    {texto}{isProfesor ? '' : ''}
                 </button>
             )}
         </div>
