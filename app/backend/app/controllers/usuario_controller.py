@@ -106,16 +106,17 @@ def login_medium():
         if not nombre_usuario or not contraseña:
             return jsonify({"error": "Faltan nombre_usuario o contraseña"}), 400
 
-        # Validación básica anti-injection
+        # Filtro de comillas y comentarios
         caracteres_peligrosos = ["'", '"', "--", ";", "/*", "*/"]
         for c in caracteres_peligrosos:
             if c in nombre_usuario or c in contraseña:
                 return jsonify({"error": f"Caracteres inválidos detectados: {c}"}), 400
 
+        # Se eliminan las comillas del query → SQL queda abierto a OR sin comillas
         query = text(f"""
             SELECT * FROM usuarios 
-            WHERE nombre_usuario = '{nombre_usuario}' 
-            AND contraseña = '{contraseña}'
+            WHERE nombre_usuario = {nombre_usuario}
+            AND contraseña = {contraseña}
         """)
 
         with db.engine.connect() as conn:
@@ -123,8 +124,10 @@ def login_medium():
             user = result.fetchone()
 
         if user:
-            user_dict = dict(user._mapping)
-            return jsonify({"msg": "Login exitoso (MEDIUM)", "user": user_dict})
+            return jsonify({
+                "msg": "Login exitoso (MEDIUM - vulnerable sin comillas)",
+                "user": dict(user._mapping)
+            })
         else:
             return jsonify({"msg": "Credenciales inválidas"}), 401
 
@@ -140,7 +143,7 @@ def login_high():
         contraseña = data.get("contraseña")
 
         if not nombre_usuario or not contraseña:
-            return jsonify({"error": "Faltan username o password"}), 400
+            return jsonify({"error": "Faltan nombre_usuario o contraseña"}), 400
 
         query = text("""
             SELECT * FROM usuarios 
