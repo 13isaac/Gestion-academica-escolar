@@ -21,7 +21,7 @@ app.config["JWT_SECRET_KEY"]="tu_clave_secreta_aqui"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://ga_admin:Gestion123!@localhost/gestion_academica'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]=False
-#app.config["SQLALCHEMY_ECHO"] = True
+app.config["SQLALCHEMY_ECHO"] = True
 
 db.init_app(app)
 jwt = JWTManager(app)

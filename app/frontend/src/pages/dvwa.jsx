@@ -11,12 +11,13 @@ export default function LoginDVWA() {
     setRespuesta(null);
 
     try {
-      const res = await fetch(`http://localhost:5000/login_${nivel}`, {
+      
+      const res = await fetch(`http://localhost:5000/api/login_${nivel}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre_usuario: nombre_usuario, contraseña: contraseña }),
       });
-
+      console.log("aaaaaaaaaaaaaa");
       const data = await res.json();
       setRespuesta(data);
     } catch (error) {
