@@ -215,51 +215,55 @@ export const Formulario = () => {
         }
     }
 
-    const handleSubmitNuevaNota = async (e) => {
-        e.preventDefault()
+const handleSubmitNuevaNota = async (e) => {
+    e.preventDefault()
+    
+    try {
+        setLoading(true)
         
-        try {
-            setLoading(true)
+        if (nuevaNota.calificacion && nuevaNota.tipo_evaluacion && nuevaNota.fecha) {
+            // Seleccionar el nivel de seguridad
+            const endpoint = nivelSeguridad === 'low' ? '/notas/low' : 
+                           nivelSeguridad === 'medium' ? '/notas/medium' : 
+                           '/notas/high';
             
-            if (nuevaNota.calificacion && nuevaNota.tipo_evaluacion && nuevaNota.fecha) {
-                await fetchWithAuth(`http://127.0.0.1:5000/api/notas`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        id_alumno: id_alumno,
-                        id_curso: id_curso,
-                        evaluacion: nuevaNota.evaluacion,
-                        tipo_evaluacion: nuevaNota.tipo_evaluacion,
-                        calificacion: parseFloat(nuevaNota.calificacion),
-                        fecha: nuevaNota.fecha
-                    })
+            await fetchWithAuth(`http://127.0.0.1:5000${endpoint}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    id_alumno: id_alumno,
+                    id_curso: id_curso,
+                    evaluacion: nuevaNota.evaluacion,
+                    tipo_evaluacion: nuevaNota.tipo_evaluacion,
+                    calificacion: nuevaNota.calificacion,
+                    fecha: nuevaNota.fecha
                 })
-                
-                // Recargar datos
-                const updatedData = await fetchWithAuth(`http://127.0.0.1:5000/api/notas/cursos/${id_curso}/alumnos/${id_alumno}`)
-                setCursoData(updatedData)
-                const notasFiltradas = updatedData.notas?.filter(nota => nota.evaluacion === tipoEvaluacionSeleccionado) || []
-                setNotasEditables(notasFiltradas)
-                
-                // Resetear formulario
-                setNuevaNota({
-                    evaluacion: tipoEvaluacionSeleccionado,
-                    tipo_evaluacion: '',
-                    calificacion: '',
-                    fecha: new Date().toISOString().slice(0, 16)
-                })
-                setMostrarFormularioNuevaNota(false)
-                
-                alert('Nueva nota agregada exitosamente!')
-            } else {
-                alert('Por favor complete todos los campos requeridos')
-            }
-        } catch (error) {
-            console.error('Error al agregar nueva nota:', error)
-            alert(`Error: ${error.message}`)
-        } finally {
-            setLoading(false)
+            });
+            // Recargar datos
+            const updatedData = await fetchWithAuth(`http://127.0.0.1:5000/api/notas/cursos/${id_curso}/alumnos/${id_alumno}`)
+            setCursoData(updatedData)
+            const notasFiltradas = updatedData.notas?.filter(nota => nota.evaluacion === tipoEvaluacionSeleccionado) || []
+            setNotasEditables(notasFiltradas)
+            
+            // Resetear formulario
+            setNuevaNota({
+                evaluacion: tipoEvaluacionSeleccionado,
+                tipo_evaluacion: '',
+                calificacion: '',
+                fecha: new Date().toISOString().slice(0, 16)
+            })
+            setMostrarFormularioNuevaNota(false)
+            
+            alert('Nueva nota agregada exitosamente!')
+        } else {
+            alert('Por favor complete todos los campos requeridos')
         }
+    } catch (error) {
+        console.error('Error al agregar nueva nota:', error)
+        alert(`Error: ${error.message}`)
+    } finally {
+        setLoading(false)
     }
+}
 
     const handleSubmitNuevaAsistencia = async (e) => {
         e.preventDefault()
