@@ -73,7 +73,7 @@ def login_low():
         contraseña = data.get("contraseña")
 
         if not nombre_usuario or not contraseña:
-            return jsonify({"error": "Faltan username o password"}), 400
+            return jsonify({"error": "Falta usuario o contraseña"}), 400
 
         query = text(f"""
             SELECT * FROM usuarios 
@@ -83,11 +83,12 @@ def login_low():
 
         with db.engine.connect() as conn:
             result = conn.execute(query)
-            user = result.fetchone()
+            #user = result.fetchone()   #devuelve solo uno
+            user = result.fetchall()    #devuelve varios
 
         if user:
-            # Convierte a diccionario usando _mapping
-            user_dict = dict(user._mapping)
+            user_dict = [dict(user._mapping) for user in user]
+            #user_dict = dict(user._mapping)
             return jsonify({"msg": "Login exitoso (LOW)", "user": user_dict})
         else:
             return jsonify({"msg": "Credenciales inválidas"}), 401
@@ -103,7 +104,7 @@ def login_medium():
         contraseña = data.get("contraseña")
 
         if not nombre_usuario or not contraseña:
-            return jsonify({"error": "Faltan username o password"}), 400
+            return jsonify({"error": "Faltan nombre_usuario o contraseña"}), 400
 
         # Validación básica anti-injection
         caracteres_peligrosos = ["'", '"', "--", ";", "/*", "*/"]
