@@ -106,13 +106,12 @@ def login_medium():
         if not nombre_usuario or not contraseña:
             return jsonify({"error": "Faltan nombre_usuario o contraseña"}), 400
 
-        # Filtro de comillas y comentarios
+        # Validación básica anti-injection
         caracteres_peligrosos = ["'", '"', "--", ";", "/*", "*/"]
         for c in caracteres_peligrosos:
             if c in nombre_usuario or c in contraseña:
                 return jsonify({"error": f"Caracteres inválidos detectados: {c}"}), 400
 
-        # Se eliminan las comillas del query → SQL queda abierto a OR sin comillas
         query = text(f"""
             SELECT * FROM usuarios 
             WHERE nombre_usuario = {nombre_usuario}
