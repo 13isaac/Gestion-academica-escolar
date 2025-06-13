@@ -16,6 +16,10 @@ class Matricula(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
     @staticmethod
     def get_all():
         return Matricula.query.all()
@@ -32,4 +36,6 @@ class Matricula(db.Model):
     def get_by_id_alumno(id_alumno):
         return Matricula.query.filter_by(id_alumno=id_alumno).all()
     
-    
+    @staticmethod
+    def get_by_id_alumno_first(id_alumno):
+        return Matricula.query.filter_by(id_alumno=id_alumno).first()

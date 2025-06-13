@@ -26,6 +26,17 @@ def get_alumnos():
     alumnos = Alumno.get_all()
     return jsonify(render_alumno_list(alumnos))
 
+@alumno_bp.route("alumnos/<int:id>", methods=["DELETE"])
+@jwt_required
+@roles_required(rol = ["admin","profesor"])
+def delete_alumno(id):
+    alumno = Matricula.get_by_id_alumno_first(id)
+    if not alumno:
+        return jsonify({"error":"Alumno no encontrado"}),404
+    
+    alumno.delete()
+    return "", 204
+
 @alumno_bp.route("/alumnos/<int:id>", methods = ["GET"])
 @jwt_required
 @roles_required(rol = ["admin","profesor","user"])
